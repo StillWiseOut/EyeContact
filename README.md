@@ -3,13 +3,29 @@
 Видеоэффект для Premiere Pro (и After Effects), который «переводит» взгляд человека в камеру
 с помощью NVIDIA Maxine AR SDK (функция Gaze Redirection / Eye Contact).
 
-В Premiere: **Effects → Video Effects → Maxine → EyeContact**.
+## Установка
 
-## Что нужно
+Нужны Windows 10/11, видеокарта NVIDIA RTX (20/30/40/50 серии) и Premiere Pro 2025/2026.
+
+1. Откройте [последний релиз](https://github.com/StillWiseOut/EyeContact/releases/latest) и скачайте `EyeContact_v1.0.zip`.
+2. Распакуйте архив в любую папку.
+3. Закройте Premiere Pro.
+4. Запустите `Install.bat` и разрешите права администратора.
+5. Когда установщик предложит скачать NVIDIA AR SDK runtime, ответьте `y` и пройдите мастер установки NVIDIA с настройками по умолчанию.
+6. Дождитесь сообщения «Готово» и закройте окно.
+7. Откройте Premiere Pro: **Effects → Video Effects → Maxine → EyeContact** — перетащите эффект на клип.
+
+Удаление — `Uninstall.bat` из того же архива.
+
+## Сборка из исходников
+
+Ниже — для разработчиков.
+
+### Что нужно
 
 | Что | Где взять |
 |---|---|
-| Видеокарта NVIDIA RTX + свежий драйвер | есть (RTX 3080) |
+| Видеокарта NVIDIA RTX + свежий драйвер | RTX 20/30/40/50 серии |
 | Visual Studio 2022/2026 или Build Tools с «Desktop development with C++» | см. ниже |
 | After Effects SDK (Windows) | developer.adobe.com/after-effects → Download the SDK (нужен Adobe ID). Подходит 26.5 и для Premiere 26.3 |
 | Заголовки Maxine AR SDK (только для сборки) | репозиторий MAXINE-AR-SDK на GitHub (форк официального NVIDIA/MAXINE-AR-SDK, MIT): папки `nvar/include` и `nvar/src` |
@@ -21,7 +37,7 @@
 winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.CMake.Project --includeRecommended --passive"
 ```
 
-### Про Maxine
+#### Про Maxine
 - **Заголовки** — папка, где лежат `nvAR.h` и `nvARProxy.cpp` / `nvCVImageProxy.cpp`
   (`nvar/include` и `nvar/src`). Нужна только для сборки, в готовый `.aex` ничего из неё копировать не надо.
 - **Runtime** — `nvARPose.dll`, `NVCVImage.dll` и модели. Плагин ищет их в
@@ -30,7 +46,7 @@ winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsof
   (`NV_AR_SDK_PATH` — это не путь: прокси NVIDIA понимает в ней только значение `USE_APP_PATH`.)
 - Если модели лежат не в стандартном месте, задайте `MAXINE_EYECONTACT_MODEL_DIR`.
 
-## Сборка и установка
+### Сборка
 
 ```bash
 .\build.ps1 -AeSdk "D:\SDK\AfterEffectsSDK" -MaxineSdk "D:\SDK\MAXINE-AR-SDK" -BuildDir "C:\b\eyecontact"
@@ -114,3 +130,8 @@ winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsof
 - Premiere содержит собственные CUDA/AI-библиотеки. Плагин заранее загружает DLL Maxine из папки
   runtime, чтобы избежать конфликтов, но проблема всё равно возможна. Ищите её в логе.
 - Распространять плагин вместе с runtime Maxine можно только в рамках лицензии NVIDIA.
+
+## Лицензия
+
+Код EyeContact распространяется под лицензией [MIT](LICENSE).
+NVIDIA Maxine AR SDK и Adobe After Effects SDK в репозиторий не входят и подчиняются собственным лицензиям.
