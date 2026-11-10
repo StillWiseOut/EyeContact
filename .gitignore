@@ -1,0 +1,14 @@
+# build output
+build/
+dist/
+*.aex
+*.zip
+
+# SDKs are downloaded separately (licenses don't allow redistribution here)
+AfterEffectsSDK*/
+MAXINE-AR-SDK*/
+
+# debug artifacts
+*.log
+*.bmp
+.vs/
